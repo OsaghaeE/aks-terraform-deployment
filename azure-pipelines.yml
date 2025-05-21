@@ -22,16 +22,17 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
 
-    steps:
-    - task: UseTerraform@0
-      displayName: 'Install Terraform'
+      steps:
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
       inputs:
-        terraformVersion: '$(tfVersion)'
-
-    - task: TerraformInstaller@0
-      displayName: 'Ensure Terraform is Installed'
-      inputs:
-        terraformVersion: '$(tfVersion)'
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: '$(azureServiceConnection)'
+        backendAzureRmResourceGroupName: '$(backend_rg)'
+        backendAzureRmStorageAccountName: '$(backend_sa)'
+        backendAzureRmContainerName: '$(backend_container)'
+        backendAzureRmKey: '$(backend_key)'
 
     - task: TerraformTaskV4@4
       displayName: 'Terraform Init'
